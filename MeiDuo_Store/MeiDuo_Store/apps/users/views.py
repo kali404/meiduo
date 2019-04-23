@@ -30,37 +30,21 @@ class RegisterView(View):
             return HttpResponseForbidden('参数不完整')
         if not re.match(r'^[A-Za-z0-9]{5,20}', user_name):
             return HttpResponseForbidden('请输入5-20位用户名')
-        if not User.objects.filter(user_name=user_name):
+        if User.objects.filter(username=user_name):
             return HttpResponseForbidden('用户名以存在')
-        if re.match(r'^[A-Za-z0-9]{5,20}',password):
+        if not re.match(r'^[A-Za-z0-9]{5,20}', password):
             return HttpResponseForbidden('请输入5-20位密码')
-        if cpassworld!=password:
+        if cpassworld != password:
             return HttpResponseForbidden('密码输入不一致')
         if not re.match(r'^1[345789]\d{9}$', phone):
             return HttpResponseForbidden('请输入正确的手机号')
-        if not User.objects.filter(mobile=phone):
+        if User.objects.filter(mobile=phone):
             return HttpResponseForbidden('手机号以存在')
 
         user = User.objects.create_user(username=user_name, password=password, mobile=phone)
-#         保持登陆状态
-        request.session['user_id'] = user.id
-#           django封装了login
-        login(request,user)
+        #         保持登陆状态
+        #         request.session['user_id'] = user.id
+        #           django封装了login
+        login(request, user)
 
         return HttpResponse('注册成功')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
