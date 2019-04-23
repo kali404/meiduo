@@ -18,4 +18,5 @@ from django.contrib import admin
 from . import views
 urlpatterns = [
     url(r'^register/$', views.RegisterView.as_view(), name='register'),
+    url(r'^usernames/(?P<username>[A-Za-z0-9_-]{5,20})/count/$', views.UsernameCheckView.as_view()),
 ]
