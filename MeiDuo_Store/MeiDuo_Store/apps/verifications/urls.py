@@ -15,9 +15,8 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
-
+from . import views
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^', include('users.urls', namespace='users')),
-    url(r'^', include('verifications.urls', namespace='verifications')),
+    url(r'^image_codes/(?P<uuid>.*?)/$', views.ImgecodeView.as_view()),
+    # url(r'^image_codes/(?P<uuid>[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/$', views.ImgecodeView.as_view()),
 ]
