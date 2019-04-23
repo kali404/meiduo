@@ -184,4 +184,5 @@ LOGGING = {
     }
 }
 
-
+# 指定用户类型
+AUTH_USER_MODEL = 'users.User'
