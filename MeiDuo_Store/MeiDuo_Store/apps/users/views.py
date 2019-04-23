@@ -53,4 +53,10 @@ class RegisterView(View):
 class UsernameCheckView(View):
     def get(self, request, username):
         count = User.objects.filter(username=username).count()
-        return JsonResponse({'count':count})
+        return JsonResponse({'count': count})
+
+
+class MobileCheckView(View):
+    def get(self, request, mobile):
+        c = User.objects.filter(mobile=mobile).count()
+        return JsonResponse({'count': c})
