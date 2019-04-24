@@ -7,11 +7,12 @@ from django.http import *
 
 
 class ImgecodeView(View):
+
     def get(self, request, uuid):
         print(uuid)
         text, code, image = captcha.generate_captcha()
         redis = get_redis_connection('verify_code')
-        redis.set(uuid, IMAGE_CODE_EXPIRES, code)
-        return HttpResponse(image, content_type='image/png')
+        redis.setex(uuid, IMAGE_CODE_EXPIRES, code)
+        return HttpResponse(content=image, content_type='image/png')  # 指定数据类型,方便浏览器解析
 
-        # 指定数据类型,方便浏览器解析
+
