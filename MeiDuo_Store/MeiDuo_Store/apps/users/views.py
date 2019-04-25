@@ -5,6 +5,8 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views import View
+from pymysql import DatabaseError
+
 from .models import User
 
 from django.http import *
@@ -41,7 +43,11 @@ class RegisterView(View):
         if User.objects.filter(mobile=phone):
             return HttpResponseForbidden('手机号以存在')
 
-        user = User.objects.create_user(username=user_name, password=password, mobile=phone)
+        try:
+            user = User.objects.create_user(username=user_name, password=password, mobile=phone)
+        except DatabaseError:
+            return render(request, 'register.html', {'register_errmsg': '注册失败'})
+
         #         保持登陆状态
         #         request.session['user_id'] = user.id
         #           django封装了login
