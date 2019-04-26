@@ -1,2 +1,8 @@
 # 验证码的过期时间
 IMAGE_CODE_EXPIRES = 60 * 5
+# 手机验证码过期时间
+SMS_CODE_EXPIRES = 60 * 5
+# 手机重发验证码时间
+SMS_CODE_FLAG_EXPIRES = SMS_CODE_EXPIRES
+
+
