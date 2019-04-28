@@ -16,9 +16,12 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from . import views
+
 urlpatterns = [
     url(r'^register/$', views.RegisterView.as_view(), name='register'),
     url(r'^login/$', views.LoginView.as_view(), name='login'),
     url(r'^usernames/(?P<username>[A-Za-z0-9_-]{5,20})/count/$', views.UsernameCheckView.as_view()),
     url(r'^usernames/(?P<mobile>1[345789]\d{9})/count/$', views.MobileCheckView.as_view()),
+    url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
+    url(r'^info/$', views.InfoView.as_view(), name='info'),
 ]

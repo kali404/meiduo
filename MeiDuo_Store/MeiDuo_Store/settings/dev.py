@@ -24,7 +24,9 @@ SECRET_KEY = '6+m*bclsn4^&^0iz@o*vy_0a5gq_+pltm0086ke$=nupbob_h+'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'www.meiduo.site',
+]
 
 # Application definition
 
@@ -38,6 +40,9 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'verifications.apps.VerificationsConfig',
+    'contents.apps.ContentsConfig',
+    'oauth.apps.OauthConfig',
+
 
 ]
 
@@ -194,5 +199,18 @@ LOGGING = {
     }
 }
 
-# 指定用户类型
+# 指定用户类型,因为需要加入手机号所以,自定义一个用户类型,配置
 AUTH_USER_MODEL = 'users.User'
+
+AUTHENTICATION_BACKENDS = ['MeiDuo_Store.utils.auth_backend.MeiduoBackend']
+
+# 指定匿名用户进行需要登陆操作时的跳转地址
+LOGIN_URL = '/login/'
+
+# QQ授权信息
+QQ_CLIENT_ID = '101518219'
+QQ_CLIENT_SECRET = '418d84ebdc7241efb79536886ae95224'
+QQ_REDIRECT_URI = 'http://www.meiduo.site:8000/oauth_callback'
+
+
+

@@ -1,12 +1,14 @@
 import re
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 from pymysql import DatabaseError
+from verifications.constime import COOKIES_CODE_TIME
 from .models import User
 from django.http import *
 from django_redis import get_redis_connection
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class RegisterView(View):
     """用户注册"""
@@ -62,7 +64,7 @@ class RegisterView(View):
         #           django封装了login
         login(request, user)
 
-        return HttpResponse('注册成功')
+        return redirect('/login/')
 
 
 class UsernameCheckView(View):
@@ -85,6 +87,7 @@ class LoginView(View):
         # 接收
         username = request.POST.get('username')
         pwd = request.POST.get('pwd')
+        next_url = request.GET.get('next', '/')
 
         # 验证
         # 2.1非空
@@ -101,13 +104,30 @@ class LoginView(View):
         user = authenticate(username=username, password=pwd)
         if user is None:
             # 用户名或密码错误
-            print('4')
             return render(request, 'login.html', {
                 'loginerror': '用户名或密码错误'
             })
-
         else:
             # 用户名或密码正确，则状态保持，重定向
             login(request, user)
-            return HttpResponse('登陆成功')
+            response = redirect(next_url)
+            response.set_cookie('username', user.username, max_age=COOKIES_CODE_TIME)
+            return response
             # 响应
+
+
+class LogoutView(View):
+    def get(self, request):
+        # 退出登陆
+        logout(request)
+        # 删除cookie中的username(提示作用)
+        response = redirect('/')
+        response.delete_cookie('username')
+        return response
+
+
+class InfoView(LoginRequiredMixin, View):
+    def get(self, request):
+        # if not request.user.is_authenticated:
+        #     return redirect('/login/')  # 继承的LoginRequiedMixin封装了上诉代码
+        return render(request, 'user_center_info.html')
