@@ -16,5 +16,9 @@ def dumps(json, expires):
 
 def loads(s, expires):
     slizer = Slizer(settings.SECRET_KEY, expires)
-    jsons = slizer.loads(s)
-    return jsons
+    try:
+        jsons = slizer.loads(s)
+    except:
+        return None
+    else:
+        return jsons

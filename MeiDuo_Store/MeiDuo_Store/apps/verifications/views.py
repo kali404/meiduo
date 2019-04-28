@@ -38,8 +38,8 @@ class SmscodeView(View):
                 'code': RETCODE.IMAGECODEERR,
                 'errmsg': '验证码输入错误!'
             })
-        redis_cli.delete(image_code_id_request)
         # 强制过期
+        redis_cli.delete(image_code_id_request)
         if redis_cli.get('sms_flag_' + mobile):
             return JsonResponse({
                 'code': RETCODE.IMAGECODEERR,
@@ -47,7 +47,6 @@ class SmscodeView(View):
             })
         # 模拟随机生成6位验证码
         sms_code = '%06d' % random.randint(0, 999999)
-        # sms_code = str(112233)  # 先凑乎
         redis_pl = redis_cli.pipeline()
         redis_pl.setex('sms-' + mobile, SMS_CODE_EXPIRES, sms_code)
         redis_pl.setex('sms_flag_' + mobile, SMS_CODE_FLAG_EXPIRES, 1)

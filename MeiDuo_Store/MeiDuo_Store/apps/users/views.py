@@ -47,7 +47,7 @@ class RegisterView(View):
         if not sms_code:
             return HttpResponseForbidden('手机验证失效')
 
-        print(sms_code.decode(), check_sms_code)
+        # print(sms_code.decode(), check_sms_code)
 
         if check_sms_code != sms_code.decode():
             return HttpResponseForbidden('手机验证码错误')
