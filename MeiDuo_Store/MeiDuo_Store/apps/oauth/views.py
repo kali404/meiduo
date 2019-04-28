@@ -13,18 +13,6 @@ from .models import OAuthQQUser
 from MeiDuo_Store.apps.verifications.constime import COOKIES_CODE_TIME
 
 
-def generate_eccess_token(openid):
-    """
-    签名openid
-    :param openid: 用户的openid
-    :return: access_token
-    """
-    serializer = Serializer(settings.SECRET_KEY, expires_in=constants.ACCESS_TOKEN_EXPIRES)
-    data = {'openid': openid}
-    token = serializer.dumps(data)
-    return token.decode()
-
-
 class QQurlView(View):
     def get(self, request):
         # 生成授权地址
@@ -62,21 +50,30 @@ class QQopenidView(View):
             settings.QQ_REDIRECT_URI,
             next_url
         )
-        # 3.根据code获取token
-        token = qq_tool.get_access_token(code)
-        # 4.根据token获取openid
-        openid = qq_tool.get_open_id(token)
         try:
+            # 3.根据code获取token
+            token = qq_tool.get_access_token(code)
+            # 4.根据token获取openid
+            openid = qq_tool.get_open_id(token)
+            try:
+                # 查表
+                oauth_user = OAuthQQUser.objects.get(openid=openid)
 
-            oauth_user = OAuthQQUser.objects.get(openid=openid)
+            except:
+                context = {'token': openid}
 
-        except OAuthQQUser.DoesNotExist:
-            access_token = generate_eccess_token(openid)
-            context = {'access_token': access_token}
-            return render(request, 'oauth_callback.html', context)
-        else:
-            qq_url = oauth_user.user
-            login(request, oauth_user)
-            response = redirect(reversed('users.index'))
-            response.set_cookie('username', qq_url.username, max_age=COOKIES_CODE_TIME)
-            return response
+
+                # 未绑定
+                return render(request, 'oauth_callback.html')
+            else:
+                # 绑定过
+                pass
+
+        except:
+            openid = 0
+
+    def post(self,request):
+        # 用于接受绑定页面的数据
+        mobile = request.GET.get('mobile')
+
+        pass

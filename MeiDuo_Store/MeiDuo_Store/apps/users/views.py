@@ -100,20 +100,6 @@ class LoginView(View):
         if not re.match('^[0-9A-Za-z]{8,20}$', pwd):
             return HttpResponseBadRequest('请输入8-20位的密码')
 
-        # 处理：查询，状态保持
-        user = authenticate(username=username, password=pwd)
-        if user is None:
-            # 用户名或密码错误
-            return render(request, 'login.html', {
-                'loginerror': '用户名或密码错误'
-            })
-        else:
-            # 用户名或密码正确，则状态保持，重定向
-            login(request, user)
-            response = redirect(next_url)
-            response.set_cookie('username', user.username, max_age=COOKIES_CODE_TIME)
-            return response
-            # 响应
 
 
 class LogoutView(View):
@@ -131,3 +117,4 @@ class InfoView(LoginRequiredMixin, View):
         # if not request.user.is_authenticated:
         #     return redirect('/login/')  # 继承的LoginRequiedMixin封装了上诉代码
         return render(request, 'user_center_info.html')
+

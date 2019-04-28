@@ -1,6 +1,5 @@
 from django.db import models
 from users.models import User
-# Create your models here.
 from MeiDuo_Store.utils.models import BaseModel
 
 
