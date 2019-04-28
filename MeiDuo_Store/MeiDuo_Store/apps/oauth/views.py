@@ -1,17 +1,12 @@
 import re
-from asyncio import constants
-
 from django.contrib.auth import login
 from users.models import User
-from django.db import DatabaseError
 from django.http import *
 from django.shortcuts import render, redirect
 from django.views import View
 from django import http
 from QQLoginTool.QQtool import OAuthQQ
-from django.conf import settings
 from django_redis import get_redis_connection
-
 from MeiDuo_Store.utils.meiduo_signature import *
 from MeiDuo_Store.utils.response_code import RETCODE
 from .models import OAuthQQUser
