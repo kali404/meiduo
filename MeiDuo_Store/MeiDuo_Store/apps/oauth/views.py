@@ -85,9 +85,8 @@ class QQopenidView(View):
 
         next_url = request.GET.get('state')
 
-        print('@@', password, '\n')
         # 验证开始,非空,格式验证
-        if not all(['password', 'mobile', 'sms_code', 'token']):
+        if not all([password, mobile, sms_code, token]):
             return HttpResponseForbidden('参数不完整')
         if not re.match(r'^[A-Za-z0-9]{5,20}', password):
             return HttpResponseForbidden('请输入5-20位密码')

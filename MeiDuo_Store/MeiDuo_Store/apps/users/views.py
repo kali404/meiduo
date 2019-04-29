@@ -5,12 +5,15 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from pymysql import DatabaseError
-from verifications.constime import COOKIES_CODE_TIME
+from verifications.constime import EMAIL_TIME_DUMPS,COOKIES_CODE_TIME
 from MeiDuo_Store.utils.response_code import RETCODE
 from .models import User
 from django.http import *
 from django_redis import get_redis_connection
 from django.contrib.auth.mixins import LoginRequiredMixin
+from celery_tasks.mail.tasks import send_user_mali
+from django.conf import settings
+from MeiDuo_Store.utils import meiduo_signature
 
 
 class RegisterView(View):
@@ -103,6 +106,15 @@ class LoginView(View):
         if not re.match('^[0-9A-Za-z]{8,20}$', pwd):
             return HttpResponseBadRequest('请输入8-20位的密码')
 
+        user = authenticate(username=username, password=pwd)
+        if user is None:
+            return render(request, 'login.html', {'loginerror': '用户名密码错误'})
+        else:
+            login(request,user)
+            response = redirect(next_url)
+            response.set_cookie('username',user.username, max_age= COOKIES_CODE_TIME)
+            return response
+
 
 class LogoutView(View):
     def get(self, request):
@@ -133,7 +145,7 @@ class EmailView(LoginRequiredMixin, View):
     def put(self, request):
         dict1 = json.loads(request.body.decode())
         email = dict1.get('email')
-        if not all(['email']):
+        if not all([email]):
             return JsonResponse({
                 'code': RETCODE.PARAMERR,
                 'errmsg': '么有邮箱数据',
@@ -146,7 +158,32 @@ class EmailView(LoginRequiredMixin, View):
         user = request.user
         user.email = email
         user.save()
+        # 加密
+        token = meiduo_signature.dumps({'user_id': user.id}, EMAIL_TIME_DUMPS)
+        urls = settings.EMAIL_ACTIVE_URL + '?user_id=%s' % token
+        send_user_mali.delay(email, urls)
         return JsonResponse({
             'code': RETCODE.OK,
             'errmsg': 'ok'
         })
+
+
+class EmailActiveView(View):
+    def get(self, request):
+        token = request.GET.get('user_id')
+        if not all([token]):
+            return HttpResponseBadRequest('参数不完整')
+        json_t = meiduo_signature.loads(token, EMAIL_TIME_DUMPS)
+
+        if json_t is None:
+            return HttpResponseBadRequest('连接无效')
+        user_id = json_t.get('user_id')
+        try:
+            user = User.objects.get(pk=user_id)
+        except:
+            return HttpResponseBadRequest('激活链接无效')
+        else:
+            user.email_active = True
+            user.save()
+        # 响应
+        return redirect('/info/')

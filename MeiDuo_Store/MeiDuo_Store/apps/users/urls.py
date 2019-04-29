@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
     url(r'^info/$', views.InfoView.as_view(), name='info'),
     url(r'^emails/$', views.EmailView.as_view(), name='emails'),
+    url(r'^emails/verification/$', views.EmailActiveView.as_view(), name='V_emails'),
 ]
