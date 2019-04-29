@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^usernames/(?P<mobile>1[345789]\d{9})/count/$', views.MobileCheckView.as_view()),
     url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
     url(r'^info/$', views.InfoView.as_view(), name='info'),
+    url(r'^emails/$', views.EmailView.as_view(), name='emails'),
 ]

@@ -1,3 +1,4 @@
+import json
 import re
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
@@ -5,6 +6,7 @@ from django.urls import reverse
 from django.views import View
 from pymysql import DatabaseError
 from verifications.constime import COOKIES_CODE_TIME
+from MeiDuo_Store.utils.response_code import RETCODE
 from .models import User
 from django.http import *
 from django_redis import get_redis_connection
@@ -125,3 +127,26 @@ class InfoView(LoginRequiredMixin, View):
         }
 
         return render(request, 'user_center_info.html', context)
+
+
+class EmailView(LoginRequiredMixin, View):
+    def put(self, request):
+        dict1 = json.loads(request.body.decode())
+        email = dict1.get('email')
+        if not all(['email']):
+            return JsonResponse({
+                'code': RETCODE.PARAMERR,
+                'errmsg': '么有邮箱数据',
+            })
+        if not re.match('^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$', email):
+            return JsonResponse({
+                'code': RETCODE.PARAMERR,
+                'errmsg': '邮箱格式错误',
+            })
+        user = request.user
+        user.email = email
+        user.save()
+        return JsonResponse({
+            'code': RETCODE.OK,
+            'errmsg': 'ok'
+        })
