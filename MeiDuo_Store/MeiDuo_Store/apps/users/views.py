@@ -10,6 +10,7 @@ from django.http import *
 from django_redis import get_redis_connection
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+
 class RegisterView(View):
     """用户注册"""
 
@@ -101,7 +102,6 @@ class LoginView(View):
             return HttpResponseBadRequest('请输入8-20位的密码')
 
 
-
 class LogoutView(View):
     def get(self, request):
         # 退出登陆
@@ -116,5 +116,12 @@ class InfoView(LoginRequiredMixin, View):
     def get(self, request):
         # if not request.user.is_authenticated:
         #     return redirect('/login/')  # 继承的LoginRequiedMixin封装了上诉代码
-        return render(request, 'user_center_info.html')
+        user = request.user
+        context = {
+            'username': user.username,
+            'mobile': user.mobile,
+            'email': user.email,
+            'email_active': user.email_active,
+        }
 
+        return render(request, 'user_center_info.html', context)
