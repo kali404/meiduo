@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from pymysql import DatabaseError
-from verifications.constime import EMAIL_TIME_DUMPS,COOKIES_CODE_TIME
+from verifications.constime import EMAIL_TIME_DUMPS, COOKIES_CODE_TIME
 from MeiDuo_Store.utils.response_code import RETCODE
 from .models import User
 from django.http import *
@@ -94,6 +94,7 @@ class LoginView(View):
         username = request.POST.get('username')
         pwd = request.POST.get('pwd')
         next_url = request.GET.get('next', '/')
+        print(next_url)
 
         # 验证
         # 2.1非空
@@ -110,9 +111,10 @@ class LoginView(View):
         if user is None:
             return render(request, 'login.html', {'loginerror': '用户名密码错误'})
         else:
-            login(request,user)
+            print('我是')
+            login(request, user)
             response = redirect(next_url)
-            response.set_cookie('username',user.username, max_age= COOKIES_CODE_TIME)
+            response.set_cookie('username', user.username, max_age=COOKIES_CODE_TIME)
             return response
 
 
@@ -187,3 +189,8 @@ class EmailActiveView(View):
             user.save()
         # 响应
         return redirect('/info/')
+
+
+class AddressView(LoginRequiredMixin, View):
+    def get(self, requests):
+        return render(requests, 'user_center_site.html')

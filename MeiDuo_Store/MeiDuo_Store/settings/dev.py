@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'verifications.apps.VerificationsConfig',
     'contents.apps.ContentsConfig',
     'oauth.apps.OauthConfig',
+    'areas.apps.AreasConfig',
 
 ]
 
