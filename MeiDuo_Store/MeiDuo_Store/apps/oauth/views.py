@@ -17,7 +17,7 @@ class QQurlView(View):
     def get(self, request):
         # 生成授权地址
         next_url = request.GET.get('next')
-        print('\n', next_url)
+        # print('\n', next_url)
         # 1.创建工具对象
         qq_tool = OAuthQQ(
             settings.QQ_CLIENT_ID,
@@ -115,7 +115,7 @@ class QQopenidView(View):
             return HttpResponseBadRequest('授权已过期')
         # 解密返回json数据,取值
         openid = json['openid']
-        print('@@', openid, '##')
+        # print('@@', openid, '##')
         try:
             user = User.objects.get(mobile=mobile)
         except:

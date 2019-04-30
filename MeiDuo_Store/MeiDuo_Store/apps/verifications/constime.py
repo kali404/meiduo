@@ -11,3 +11,6 @@ COOKIES_TIME_DUMPS = 60 * 5
 
 # 邮箱激活有效时间
 EMAIL_TIME_DUMPS = 60 * 60
+
+# 地址缓存时间
+AREA_CACHE_EXPIRES = 60 * 60
