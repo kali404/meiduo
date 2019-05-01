@@ -21,7 +21,7 @@ class User(AbstractUser):
 
 class Address(BaseModel):
     """用户地址"""
-    user = models.ForeignKey('User', related_name='addersses')
+    user = models.ForeignKey(User, related_name='addersses')  # 给对应的用户
     title = models.CharField(max_length=20, verbose_name='地址名称')  # 标题
     receiver = models.CharField(max_length=20, verbose_name='收货人')  # 收件人的名字
     province = models.ForeignKey(Areas, on_delete=models.PROTECT, related_name='provinces', verbose_name='省')  # 省
