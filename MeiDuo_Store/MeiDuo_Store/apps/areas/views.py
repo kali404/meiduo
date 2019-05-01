@@ -7,7 +7,7 @@ from django.views import View
 from MeiDuo_Store.utils.response_code import RETCODE
 from django.http import *
 from verifications.constime import AREA_CACHE_EXPIRES
-from .models import Areas, Address
+from .models import Areas
 
 
 class AreaView(View):
