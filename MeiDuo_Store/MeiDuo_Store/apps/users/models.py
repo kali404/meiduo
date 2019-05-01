@@ -24,9 +24,9 @@ class Address(BaseModel):
     user = models.ForeignKey('User', related_name='addersses')
     title = models.CharField(max_length=20, verbose_name='地址名称')  # 标题
     receiver = models.CharField(max_length=20, verbose_name='收货人')  # 收件人的名字
-    province = models.ForeignKey('Areas', on_delete=models.PROTECT, related_name='provinces', verbose_name='省')  # 省
-    city = models.ForeignKey(Areas, on_delete=models.PROTECT, related_name='city', verbose_name='市')  # 市
-    district = models.ForeignKey(Areas, on_delete=models.PROTECT, related_name='district', verbose_name='区')  # 区
+    province = models.ForeignKey(Areas, on_delete=models.PROTECT, related_name='provinces', verbose_name='省')  # 省
+    city = models.ForeignKey(Areas, related_name='city', verbose_name='市')  # 市
+    district = models.ForeignKey(Areas, related_name='district', verbose_name='区')  # 区
     place = models.CharField(max_length=50, verbose_name='地址')  # 详细地址
     mobile = models.CharField(max_length=11, verbose_name='手机')  # 手机号
     tel = models.CharField(max_length=20, null=True, blank=True, default='', verbose_name='固定电话')  # 收件人电话

@@ -1,6 +1,4 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
-from MeiDuo_Store.utils.models import BaseModel
 
 
 class Areas(models.Model):
