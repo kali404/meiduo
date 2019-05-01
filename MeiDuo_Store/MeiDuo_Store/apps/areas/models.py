@@ -1,4 +1,6 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from MeiDuo_Store.utils.models import BaseModel
 
 
 class Areas(models.Model):
@@ -8,4 +10,5 @@ class Areas(models.Model):
 
     class Meta:
         db_table = 'tb_areas'
+
 

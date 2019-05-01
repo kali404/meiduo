@@ -27,4 +27,12 @@ urlpatterns = [
     url(r'^emails/$', views.EmailView.as_view(), name='emails'),
     url(r'^addresses/$', views.AddressView.as_view(), name='areas'),
     url(r'^emails/verification/$', views.EmailActiveView.as_view(), name='V_emails'),
+    # 新增
+    url(r'^addresses/create/$', views.CreateAddressView.as_view(), name='create'),
+    # 展示Get
+    url(r'^addresses/$', views.AddressView.as_view(), name='create'),
+    # 修改 and 删除
+    url(r'^addresses/(?P<address_id>\d+)/$', views.CreateAddressView.as_view(), name='areas'),
+    # 默认地址的设置
+    url(r'^addresses/(?P<address_id>\d+)/default/$', views.DefaultAddressView.as_view(), name='areas'),
 ]

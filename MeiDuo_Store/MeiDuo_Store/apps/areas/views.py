@@ -1,9 +1,13 @@
+import json
+import re
+
 from django.core.cache import cache
+from django.shortcuts import render
 from django.views import View
 from MeiDuo_Store.utils.response_code import RETCODE
 from django.http import *
 from verifications.constime import AREA_CACHE_EXPIRES
-from .models import Areas
+from .models import Areas, Address
 
 
 class AreaView(View):
@@ -12,7 +16,6 @@ class AreaView(View):
         if area_id is None:
             prov = Areas.objects.filter(parent__isnull=True)
             pro_list = list()
-            print()
             for province in prov:
                 pro_list.append({
                     'id': province.id,
@@ -34,7 +37,6 @@ class AreaView(View):
             else:
                 subs = aera.subs.all()
                 sub_list = list()
-                print(222)
                 for sub in subs:
                     sub_list.append({
                         'id': sub.id,
@@ -47,8 +49,10 @@ class AreaView(View):
                 }
                 # 写缓存
                 cache.set('area_' + area_id, sub_data, AREA_CACHE_EXPIRES)
-            return JsonResponse({
-                'code': RETCODE.OK,
-                'errmsg': 'ok',
-                'sub_data': sub_data
-            })
+        return JsonResponse({
+            'code': RETCODE.OK,
+            'errmsg': 'ok',
+            'sub_data': sub_data
+        })
+
+
