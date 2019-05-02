@@ -351,3 +351,32 @@ class UpdateTitleAddressView(LoginRequiredMixin, View):
         address = Address.objects.get(pk=address_id, user=request.user, is_deleted=False)
         # dict1 = address.to_dict()
         return JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK'})
+
+
+class UpdatePasswordView(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'user_center_pass.html')
+
+    def post(self, request):
+        lod_pwd = request.POST.get('old_pwd')
+        new_pwd = request.POST.get('new_pwd')
+        new_cpwd = request.POST.get('new_cpwd')
+
+        if not all([lod_pwd, new_cpwd, new_pwd]):
+            return HttpResponseBadRequest('缺少必传参数')
+        if not request.user.check_password(lod_pwd):
+            return HttpResponseBadRequest('原密码输入错误')
+        if not re.match(r'^[0-|9A-Za-z]{8,20}$', new_pwd):
+            return HttpResponseBadRequest('密码格式错误')
+        if new_pwd != new_cpwd:
+            return HttpResponseBadRequest('两次密码输入 不一致')
+
+        try:
+            request.user.set_password(new_pwd)
+            request.user.save()
+        except:
+            return render(request, 'user_center_pass.html', {'change_pwd_errmsg': '密码修改失败|'})
+        logout(request)
+        response = redirect('/login/')
+        response.delete_cookie('username')
+        return response

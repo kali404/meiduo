@@ -36,5 +36,6 @@ urlpatterns = [
     # 默认地址的设置
     url(r'^addresses/(?P<address_id>\d+)/default/$', views.DefaultAddressView.as_view()),
     url(r'^addresses/(?P<address_id>\d+)/title/$', views.UpdateTitleAddressView.as_view()),
+    url(r'^password/$', views.UpdatePasswordView.as_view()),
 
 ]
