@@ -32,7 +32,9 @@ urlpatterns = [
     # 展示Get
     url(r'^addresses/$', views.AddressView.as_view(), name='create'),
     # 修改 and 删除
-    url(r'^addresses/(?P<address_id>\d+)/$', views.CreateAddressView.as_view(), name='areas'),
+    url(r'^addresses/(?P<address_id>\d+)/$', views.UpdateDestroyAddressView.as_view()),
     # 默认地址的设置
-    url(r'^addresses/(?P<address_id>\d+)/default/$', views.DefaultAddressView.as_view(), name='areas'),
+    url(r'^addresses/(?P<address_id>\d+)/default/$', views.DefaultAddressView.as_view()),
+    url(r'^addresses/(?P<address_id>\d+)/title/$', views.UpdateTitleAddressView.as_view()),
+
 ]

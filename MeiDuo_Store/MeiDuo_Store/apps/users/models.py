@@ -38,3 +38,21 @@ class Address(BaseModel):
         verbose_name = '用户地址'
         verbose_name_plural = verbose_name
         ordering = ['-update_time']
+
+    def to_dict(self):
+        return {
+                'id': self.id,
+                'title': self.receiver,
+                'receiver': self.receiver,
+                'province': self.province.name,
+                'province_id': self.province_id,
+                'city': self.city.name,
+                'city_id': self.city_id,
+                'district': self.district.name,
+                'district_id': self.district_id,
+                'place': self.place,
+                'mobile': self.mobile,
+                'tel': self.tel,
+                'email': self.email,
+            }
+

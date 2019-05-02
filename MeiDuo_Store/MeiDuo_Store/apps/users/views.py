@@ -193,7 +193,13 @@ class EmailActiveView(View):
 
 class AddressView(LoginRequiredMixin, View):
     def get(self, requests):
-        return render(requests, 'user_center_site.html')
+        user = requests.user
+        address_list = Address.objects.filter(user=user, is_deleted=False)
+        addresses = list()
+        for i in address_list:
+            addresses.append(i.to_dict())
+        context = {'addresses': addresses, 'default_address_id': user.default_address_id}
+        return render(requests, 'user_center_site.html', context=context)
 
 
 class CreateAddressView(LoginRequiredMixin, View):
@@ -213,7 +219,6 @@ class CreateAddressView(LoginRequiredMixin, View):
         tel = dict1.get('tel')
         email = dict1.get('email')
 
-        print(receiver, province_id, city_id, district_id, place, mobile)
         # 校验参数
         if not all([receiver, province_id, city_id, district_id, place, mobile]):
             return HttpResponseForbidden('缺少必传参数')
@@ -249,23 +254,7 @@ class CreateAddressView(LoginRequiredMixin, View):
             request.user.default_address = address
             request.user.save()
 
-        return JsonResponse({'code': RETCODE.OK, 'errmsg': '新增地址成功', 'address': {
-            'title': address.receiver,
-            'receiver': address.receiver,
-            'province': address.province.name,
-            'province_id': address.province_id,
-            'city': address.city.name,
-            'city_id': address.city_id,
-            'district': address.district.name,
-            'district_id': address.district_id,
-            'place': address.place,
-            'mobile': address.mobile,
-            'tel': address.tel,
-            'email': address.email
-        },
-    })
-
-
+        return JsonResponse({'code': RETCODE.OK, 'errmsg': '新增地址成功', 'address': address.to_dict()})
 
 
 class UpdateDestroyAddressView(LoginRequiredMixin, View):
@@ -298,9 +287,7 @@ class UpdateDestroyAddressView(LoginRequiredMixin, View):
 
         # 判断地址是否存在,并更新地址信息
         try:
-            Address.objects.filter(id=address_id).update(
-                user=request.user,
-                title=receiver,
+            Address.objects.filter(pk=address_id, user=request.user, is_deleted=False).update(
                 receiver=receiver,
                 province_id=province_id,
                 city_id=city_id,
@@ -308,44 +295,24 @@ class UpdateDestroyAddressView(LoginRequiredMixin, View):
                 place=place,
                 mobile=mobile,
                 tel=tel,
-                email=email
-            )
-        except Exception as e:
-            logger.error(e)
-            return JsonResponse({'code': RETCODE.DBERR, 'errmsg': '更新地址失败'})
+                email=email)
+        except:
+            return JsonResponse({'code': RETCODE.DBERR, 'errmsg': '修改失败'})
 
         # 构造响应数据
-        address = Address.objects.get(id=address_id)
-        address_dict = {
-            "id": address.id,
-            "title": address.title,
-            "receiver": address.receiver,
-            "province": address.province.name,
-            "province_id": address.province.id,
-            "city": address.city.name,
-            "city_id": address.city.id,
-            "district": address.district.name,
-            "district_id": address.district.id,
-            "place": address.place,
-            "mobile": address.mobile,
-            "tel": address.tel,
-            "email": address.email
-        }
-
-        # 响应更新地址结果
-        return JsonResponse({'code': RETCODE.OK, 'errmsg': '更新地址成功', 'address': address_dict})
+        address = Address.objects.get(user=request.user, is_deleted=False, pk=address_id)
+        return JsonResponse({'code': RETCODE.OK, 'errmsg': '更新地址成功', 'address': address.to_dict()})
 
     def delete(self, request, address_id):
         """删除地址"""
         try:
             # 查询要删除的地址
-            address = Address.objects.get(id=address_id)
+            address = Address.objects.get(id=address_id, user=request.user)
 
             # 将地址逻辑删除设置为True
             address.is_deleted = True
             address.save()
         except Exception as e:
-            logger.error(e)
             return JsonResponse({'code': RETCODE.DBERR, 'errmsg': '删除地址失败'})
 
         # 响应删除地址结果
@@ -358,15 +325,29 @@ class DefaultAddressView(LoginRequiredMixin, View):
     def put(self, request, address_id):
         """设置默认地址"""
         try:
-            # 接收参数,查询地址
-            address = Address.objects.get(id=address_id)
+            # 获取这个地址对象
+            address = Address.objects.get(id=address_id, user=request.user, is_deleted=False)
 
-            # 设置地址为默认地址
+            # 把对象赋给user模型的default_address属性也可以将主键赋值给这个属性
             request.user.default_address = address
             request.user.save()
         except Exception as e:
-            logger.error(e)
             return JsonResponse({'code': RETCODE.DBERR, 'errmsg': '设置默认地址失败'})
 
         # 响应设置默认地址结果
         return JsonResponse({'code': RETCODE.OK, 'errmsg': '设置默认地址成功'})
+
+
+class UpdateTitleAddressView(LoginRequiredMixin, View):
+    """设置地址标题"""
+
+    def put(self, request, address_id):
+        json_dict = json.loads(request.body.decode())
+        title = json_dict.get('title')
+        try:
+            Address.objects.filter(pk=address_id, user=request.user, is_deleted=False).update(title=title)
+        except:
+            return JsonResponse({'code': RETCODE.PARAMERR, 'errmsg': '修改标题失败'})
+        address = Address.objects.get(pk=address_id, user=request.user, is_deleted=False)
+        # dict1 = address.to_dict()
+        return JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK'})
