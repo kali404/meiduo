@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'^', include('contents.urls', namespace='contents')),
     url(r'^', include('oauth.urls', namespace='oauth')),
     url(r'^', include('areas.urls', namespace='areas')),
+    url(r'^', include('goods.urls', namespace='goods')),
 ]
