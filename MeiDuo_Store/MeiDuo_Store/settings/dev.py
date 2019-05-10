@@ -227,7 +227,7 @@ EMAIL_HOST_PASSWORD = 'hmmeiduo123'  # 邮箱授权时获得的密码，非注�
 EMAIL_FROM = '美多商城<hmmeiduo@163.com>'  # 发件人抬头
 EMAIL_ACTIVE_URL = 'http://www.meiduo.site:8000/emails/verification/'  # 邮箱验证地址
 
-# fastdfs 图片千缀
+# fastdfs 图片前缀
 FDFS_URL = 'http://image.meiduo.site:8888/'
 
 # 指定存储类型

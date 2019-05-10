@@ -96,7 +96,7 @@
 <script>
     $(function () {
         $('#pagination').pagination({
-            currentPage: {{ page.name }},
+            currentPage: {{ page.number }},
             totalPage: {{ paginator.num_pages }},
             callback: function (current) {
                 // location.href = '/search/?q=iphone&amp;page=1';
