@@ -8,6 +8,7 @@ var vm = new Vue({
         carts: [], // 购物车数据,
 		hots: [],
         category_id: category_id,
+        username:'',
     },
     mounted(){
         // 获取购物车数据

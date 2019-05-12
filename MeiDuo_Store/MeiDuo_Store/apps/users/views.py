@@ -94,7 +94,6 @@ class LoginView(View):
         username = request.POST.get('username')
         pwd = request.POST.get('pwd')
         next_url = request.GET.get('next', '/')
-        print(next_url)
 
         # 验证
         # 2.1非空
@@ -111,7 +110,6 @@ class LoginView(View):
         if user is None:
             return render(request, 'login.html', {'loginerror': '用户名密码错误'})
         else:
-            print('我是')
             login(request, user)
             response = redirect(next_url)
             response.set_cookie('username', user.username, max_age=COOKIES_CODE_TIME)

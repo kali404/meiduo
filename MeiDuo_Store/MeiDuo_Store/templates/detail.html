@@ -14,25 +14,27 @@
 	<div class="header_con">
 		<div class="header">
 			<div class="welcome fl">欢迎来到美多商城!</div>
-			<div class="fr">
-				<div class="login_info fl">
-					欢迎您：<em>张 山</em>
-				</div>
-				<div class="login_btn fl">
-					<a href="login.html">登录</a>
-					<span>|</span>
-					<a href="../templates/register.html">注册</a>
-				</div>
-				<div class="user_link fl">
-					<span>|</span>
-					<a href="user_center_info.html">用户中心</a>
-					<span>|</span>
-					<a href="cart.html">我的购物车</a>
-					<span>|</span>
-					<a href="user_center_order.html">我的订单</a>
-				</div>
-			</div>
-		</div>		
+            <div class="fr">
+                <div class="login_btn fl" v-if="username">
+                    欢迎您：<em>[[ username ]]</em>
+                    <span>|</span>
+                    <a href="/logout/" class="quit">退出</a>
+                </div>
+                <div class="login_btn fl" v-else>
+                    <a href="/login/">登录</a>
+                    <span>|</span>
+                    <a href="/register/">注册</a>
+                </div>
+
+                <div class="user_link fl">
+                    <span>|</span>
+                    <a href="/info/">用户中心</a>
+                    <span>|</span>
+                    <a href="/carts/">我的购物车</a>
+                    <span>|</span>
+                    <a href="user_center_order.html">我的订单</a>
+                </div>
+		    </div>
 	</div>
 
 	<div class="search_bar clearfix">
@@ -51,7 +53,7 @@
 		</div>
 
 		<div class="guest_cart fr">
-			<a href="cart.html" class="cart_name fl">我的购物车</a>
+			<a href="/carts/" class="cart_name fl">我的购物车</a>
 			<div class="goods_count fl" id="show_count">2</div>
 			<ul class="cart_goods_show">
 				<li>
@@ -149,9 +151,9 @@
 			</div>
 
             {% endfor %}
-			<div class="total">总价：<em>{{ sku.price }}元</em></div>
+			<div class="total">总价：<em>[[ sku_amount ]]元</em></div>
 			<div class="operate_btn">
-				<a href="javascript:;" class="add_cart" id="add_cart">加入购物车</a>				
+				<a href="javascript:;" class="add_cart" id="add_cart" @click="add_cart">加入购物车</a>
 			</div>
 		</div>
 	</div>

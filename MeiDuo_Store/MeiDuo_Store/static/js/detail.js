@@ -10,6 +10,7 @@ var vm = new Vue({
         sku_price: price,
         sku_amount: 0,
         category_id: category_id,
+        username:'',
         tab_content: {
 		    detail: true,
             pack: false,
