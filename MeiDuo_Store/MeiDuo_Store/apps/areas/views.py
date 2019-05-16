@@ -1,6 +1,3 @@
-import json
-import re
-
 from django.core.cache import cache
 from django.shortcuts import render
 from django.views import View

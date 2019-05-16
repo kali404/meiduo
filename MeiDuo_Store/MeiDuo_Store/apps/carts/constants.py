@@ -1,1 +1,3 @@
 CART_EXPIRES = 60 * 60 * 24 * 14
+
+ORDERS_LIST_LIMIT = 60 * 60 * 24 * 7

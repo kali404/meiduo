@@ -115,7 +115,8 @@ class DetalView(View):
             'breadcrumb': breadcrumb,
             'sku': sku,
             'spu': sku.spu,
-            'specs_list': specs_list
+            'specs_list': specs_list,
+            'category_id':category3.id
         }
         return render(requset, 'detail.html', context)
 

@@ -2,7 +2,6 @@ import json
 import re
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect
-from MeiDuo_Store.apps.contents import *
 from django.views import View
 from pymysql import DatabaseError
 from verifications.constime import EMAIL_TIME_DUMPS, COOKIES_CODE_TIME
@@ -14,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from celery_tasks.mail.tasks import send_user_mali
 from django.conf import settings
 from MeiDuo_Store.utils import meiduo_signature
+from carts.utils import merge_cart_cookie_to_redis
 
 
 class RegisterView(View):
@@ -70,6 +70,7 @@ class RegisterView(View):
         #           django封装了login
         login(request, user)
 
+
         return redirect('/login/')
 
 
@@ -113,6 +114,9 @@ class LoginView(View):
             login(request, user)
             response = redirect(next_url)
             response.set_cookie('username', user.username, max_age=COOKIES_CODE_TIME)
+
+
+            response = merge_cart_cookie_to_redis(request,response)
             return response
 
 

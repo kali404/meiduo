@@ -8,8 +8,10 @@ var vm = new Vue({
         pay_method: 2, // 支付方式,默认支付宝支付
         nowsite: '', // 默认地址
         payment_amount: '',
+        username:'',
     },
     mounted(){
+        this.username = getCookie('username');
         // 初始化
         this.payment_amount = payment_amount;
         // 绑定默认地址

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'areas.apps.AreasConfig',
     'goods.apps.GoodsConfig',
     'carts.apps.CartsConfig',
+    'orders.apps.OrdersConfig',
 
     # 以下为第三方
     'haystack',  # 全文检索
@@ -258,7 +259,7 @@ HAYSTACK_CONNECTIONS = {
 }
 
 # 当添加、修改、删除数据时，自动生成索引
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+# HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 # 搜索页一页多少数据
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5

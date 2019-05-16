@@ -218,3 +218,35 @@ class CartsSelectAllView(View):
 
             response.set_cookie('cart', dumps(cart_dict), max_age=constants.CART_EXPIRES)
         return response
+
+class CartsSimpleView(View):
+    """商品页面右上角购物车"""
+    def get(self, request):
+        # 判断用户是否登录
+        user = request.user
+        cart_dict = {}
+        if user.is_authenticated:
+            redis_cli = get_redis_connection('carts')
+            redis_cart_dict = redis_cli.hgetall('cart%d'%user.id)
+            cart_dict={int(sku_id):int(count) for sku_id,count in redis_cart_dict.items()}
+
+        else:
+            cart_str = request.COOKIES.get('cart')
+            if cart_str is not None:
+                cart_dict = loads(cart_str)
+                cart_dict ={int(sku_id):int(count) for sku_id, count in cart_dict.items()}
+
+        skus = SKU.objects.filter(pk__in=cart_dict.keys(), is_launched=True)
+        cart_skus = list()
+        for sku in skus:
+            cart_skus.append({
+                'id':sku.id,
+                'name':sku.name,
+                'count':cart_dict.get(sku.id),
+                'default_image_url':sku.default_image.url,
+            })
+
+        return JsonResponse({'code':RETCODE.OK,'errmsg':'ok','cart_skus':cart_skus})
+
+
+

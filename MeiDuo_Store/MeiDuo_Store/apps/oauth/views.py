@@ -11,6 +11,7 @@ from MeiDuo_Store.utils.meiduo_signature import *
 from MeiDuo_Store.utils.response_code import RETCODE
 from .models import OAuthQQUser
 from MeiDuo_Store.apps.verifications.constime import COOKIES_TIME_DUMPS
+from carts.utils import merge_cart_cookie_to_redis
 
 
 class QQurlView(View):
@@ -128,4 +129,5 @@ class QQopenidView(View):
         response = redirect(next_url)
         response.set_cookie('username', user.username, max_age=COOKIES_TIME_DUMPS)
 
+        response = merge_cart_cookie_to_redis(request, response)
         return response
