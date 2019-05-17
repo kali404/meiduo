@@ -16,21 +16,24 @@
         <div class="header">
             <div class="welcome fl">欢迎来到美多商城!</div>
             <div class="fr">
-                <div class="login_info fl">
-                    欢迎您：<em>张 山</em>
-                </div>
-                <div class="login_btn fl">
-                    <a href="login.html">登录</a>
+                <div class="login_btn fl" v-if="username">
+                    欢迎您：<em>[[ username ]]</em>
                     <span>|</span>
-                    <a href="register.html">注册</a>
+                    <a href="/logout/" class="quit">退出</a>
                 </div>
+                <div class="login_btn fl" v-else>
+                    <a href="/login/">登录</a>
+                    <span>|</span>
+                    <a href="/register/">注册</a>
+                </div>
+
                 <div class="user_link fl">
                     <span>|</span>
-                    <a href="user_center_info.html">用户中心</a>
+                    <a href="/info/">用户中心</a>
                     <span>|</span>
-                    <a href="/static/cart.html">我的购物车</a>
+                    <a href="/carts/">我的购物车</a>
                     <span>|</span>
-                    <a href="/static/user_center_order.html">我的订单</a>
+                    <a href="/orders/info/1/">我的订单</a>
                 </div>
             </div>
         </div>
@@ -52,18 +55,13 @@
         </div>
 
         <div class="guest_cart fr">
-            <a href="/static/cart.html" class="cart_name fl">我的购物车</a>
-            <div class="goods_count fl" id="show_count">2</div>
+            <a href="/carts/" class="cart_name fl">我的购物车</a>
+            <div class="goods_count fl" id="show_count">[[ cart_total_count ]]</div>
             <ul class="cart_goods_show">
-                <li>
-                    <img src="/static/images/goods/goods001.jpg" alt="商品图片">
-                    <h4>华为 HUAWEI P10 Plus 6GB+64GB 钻雕金 移动联通电信4G手机 双卡双待</h4>
-                    <div>1</div>
-                </li>
-                <li>
-                    <img src="/static/images/goods/goods002.jpg" alt="商品图片">
-                    <h4>Apple iPhoneX 64GB 深空灰色 移动联通电信4G手机</h4>
-                    <div>1</div>
+                <li v-for="cart in carts">
+                    <img :src="cart.default_image_url" alt="商品图片">
+                    <h4>[[ cart.name ]]</h4>
+                    <div>[[ cart.count ]]</div>
                 </li>
             </ul>
         </div>
@@ -1659,13 +1657,13 @@
     </div>
 
     <div class="goods_detail_con clearfix">
-        <div class="goods_detail_pic fl"><img src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRchWAMc8rAARfIK95am88158618"></div>
+        <div class="goods_detail_pic fl"><img src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRa8iAZdz1AAFZsBqChgk2188464"></div>
         <div class="goods_detail_list fr">
-            <h3>华为 HUAWEI P10 Plus 6GB+128GB 钻雕金 移动联通电信4G手机 双卡双待</h3>
-            <p>wifi双天线设计！徕卡人像摄影！P10徕卡双摄拍照，低至2988元！</p>
+            <h3>Apple iPhone 8 Plus (A1864) 64GB 深空灰色 移动联通电信4G手机</h3>
+            <p>选【移动优惠购】新机配新卡，198优质靓号，流量不限量！</p>
             <div class="price_bar">
-                <span class="show_pirce">¥<em>3788.00</em></span>
-                <a href="javascript:;" class="goods_judge">5人评价</a>
+                <span class="show_pirce">¥<em>6688.00</em></span>
+                <a href="javascript:;" class="goods_judge">0人评价</a>
             </div>
             <div class="goods_num clearfix">
                 <div class="num_name fl">数 量：</div>
@@ -1679,110 +1677,37 @@
             
                 <div class="type_select">
                     <label>颜色:</label>
-
                     
-
-
-
-
-
-
-
-
-
-
-
                         
-                            <a href="/detail/10.html" class="select">钻雕金</a>
+                            <a href="/detail/3/">金色</a>
                         
                     
-
-
-
-
-
-
-
-
-
-
-
                         
-                            <a href="/detail/11.html">钻雕蓝</a>
+                            <a href="#" class="select">深空灰</a>
                         
                     
-
-
-
-
-
-
-
-
-
-
-
                         
-                            <a href="/detail/14.html">玫瑰金</a>
-                        
-                    
-
-
-
-
-
-
-
-
-
-
-
-                        
-                            <a href="/detail/16.html">曜石黑</a>
+                            <a href="/detail/7/">银色</a>
                         
                     
                 </div>
             
                 <div class="type_select">
-                    <label>版本:</label>
-
+                    <label>内存:</label>
                     
-
-
-
-
-
-
-
-
-
-
-
                         
-                            <a href="/detail/9.html">64GB</a>
+                            <a href="#" class="select">64GB</a>
                         
                     
-
-
-
-
-
-
-
-
-
-
-
                         
-                            <a href="/detail/10.html" class="select">128GB</a>
+                            <a href="/detail/6/">256GB</a>
                         
                     
                 </div>
             
 
 
-
-            <div class="total">总价：<em>[[ sku_amount ]]元</em></div>
+            <div class="total">总价：<em>[[sku_amount]]元</em></div>
             <div class="operate_btn">
                 <a href="javascript:;" class="add_cart" id="add_cart" @click="add_cart">加入购物车</a>
             </div>
@@ -1807,52 +1732,47 @@
             <ul class="detail_tab clearfix">
                 <li @click="on_tab_content('detail')" :class="tab_content['detail']==true?'active':''">商品详情</li>
                 <li @click="on_tab_content('pack')" :class="tab_content['pack']==true?'active':''">规格与包装</li>
-                <li @click="on_tab_content('comment')" :class="tab_content['comment']==true?'active':''">商品评价([[comments.length]])</li>
+                <li @click="on_tab_content('comment')" :class="tab_content['comment']==true?'active':''">
+                    商品评价([[ comments.length ]])
+                </li>
                 <li @click="on_tab_content('service')" :class="tab_content['service']==true?'active':''">售后服务</li>
             </ul>
-            <div class="tab_content current" v-show="tab_content['detail']">
-                <dl>
-                    <dt>商品详情：</dt>
-                    <dd><p><img alt="" src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRb2yAJ0cWADV9oDHhgG06294506" style="height:10460px; width:750px" /></p></dd>
-                </dl>
-            </div>
-            <div class="tab_content current" v-show="tab_content['pack']">
-                <dl>
-                    <dt>规格与包装：</dt>
-                    <dd><h3>包装清单</h3>
+            <div class="tab_content current" v-show="tab_content['detail']"><p><img alt="" src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRYoGAC2KAAADDtplWV_04901262" style="height:341px; width:750px" /></p>
 
-<p>手机（含内置电池） x 1、大电流华为SuperCharge充电器 x 1、 USB数据线 x 1、半入耳式线控耳机 x 1、快速指南 x 1、三包凭证 x 1、取卡针 x 1、保护壳 x 1</p></dd>
-                </dl>
-            </div>
+<p><img alt="" src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRYpCAS9FFAADxmVbf5qw4487023" style="height:277px; width:750px" /></p>
+
+<p><img alt="" src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRYp6ACUuEAAWXt1XYzNg5251947" style="height:2337px; width:750px" /></p>
+
+<p><img alt="" src="http://image.meiduo.site:8888/group1/M00/00/02/CtM3BVrRYqmANdXMAAXn26rWyDY0861997" style="height:2963px; width:750px" /></p></div>
+            <div class="tab_content current" v-show="tab_content['pack']"><h3>包装清单</h3>
+
+<p>采用 Lightning 接头的 EarPods *1，iPhone *1，Lightning 至 USB 连接线*1，5W USB 电源适配器*1，Lightning 至3.5毫米耳机插孔转换器*1</p></div>
             <div class="tab_content current" v-show="tab_content['comment']">
-                <ul class="judge_list_con">
-                    <li class="judge_list fl" v-for="detail in comments">
+                 <ul class="judge_list_con">
+                    <li class="judge_list fl" v-for="comment in comments">
                         <div class="user_info fl">
                             <img src="/static/images/cat.jpg">
-                            <b>[[ detail.username ]]</b>
+                            <b>[[comment.username]]</b>
                         </div>
                         <div class="judge_info fl">
-                            <div :class="detail.score_class"></div>
-                            <div class="judge_detail">[[ detail.comment ]]</div>
+                            <div :class="comment.score_class"></div>
+                            <div class="judge_detail">[[comment.msg]]</div>
                         </div>
                     </li>
                 </ul>
             </div>
-            <div class="tab_content current" v-show="tab_content['service']">
-                <dl>
-                    <dt>售后服务：</dt>
-                    <dd><p>&nbsp;<strong>厂家服务</strong></p>
+            <div class="tab_content current" v-show="tab_content['service']"><p>&nbsp;<strong>厂家服务</strong></p>
 
 <p>本产品全国联保，享受三包服务，质保期为：一年质保<br />
 如因质量问题或故障，凭厂商维修中心或特约维修点的质量检测证明，享受7日内退货，15日内换货，15日以上在质保期内享受免费保修等三包服务！<br />
-(注:如厂家在商品介绍中有售后保障的说明,则此商品按照厂家说明执行售后保障服务。) 您可以查询本品牌在各地售后服务中心的联系方式，<a href="http://www.huawei.com/cn/" target="_blank">请点击这儿查询......</a><br />
+(注:如厂家在商品介绍中有售后保障的说明,则此商品按照厂家说明执行售后保障服务。) 您可以查询本品牌在各地售后服务中心的联系方式，<a href="http://www.apple.com/cn/" target="_blank">请点击这儿查询......</a><br />
 <br />
-品牌官方网站：<a href="http://www.huawei.com/cn/" target="_blank">http://www.huawei.com/cn/</a><br />
-售后服务电话：400-830-8300</p>
+品牌官方网站：<a href="http://www.apple.com/cn/" target="_blank">http://www.apple.com/cn/</a><br />
+售后服务电话：400-666-8800</p>
 
-<p>&nbsp;<strong>京东承诺</strong></p>
+<p>&nbsp;美多<strong>承诺</strong></p>
 
-<p>京东平台卖家销售并发货的商品，由平台卖家提供发票和相应的售后服务。请您放心购买！<br />
+<p>美多平台卖家销售并发货的商品，由平台卖家提供发票和相应的售后服务。请您放心购买！<br />
 注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！</p>
 
 <p><strong>正品行货</strong></p>
@@ -1863,9 +1783,7 @@
 
 <p>凭质保证书及京东商城发票，可享受全国联保服务（奢侈品、钟表除外；奢侈品、钟表由京东联系保修，享受法定三包售后服务），与您亲临商场选购的商品享受相同的质量保证。京东商城还为您提供具有竞争力的商品价格和<a href="https://help.jd.com/help/question-892.html" target="_blank">运费政策</a>，请您放心购买！&nbsp;<br />
 <br />
-注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解</p></dd>
-                </dl>
-            </div>
+注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！</p></div>
         </div>
     </div>
 
@@ -1884,9 +1802,9 @@
     </div>
 </div>
 <script>
-    var price = 3788.00;
+    var price = 6688.00;
     var category_id = 115;
-    var sku_id = 10;
+    var sku_id = 5;
 </script>
 <script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript" src="/static/js/detail.js"></script>

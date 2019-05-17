@@ -101,7 +101,7 @@
                             <td width="15%"><a href="javascript:;" class="oper_btn">确认收货</a></td>
                         {% elif order.status == 4 %}
                             <td width="15%">待评价</td>
-                            <td width="15%"><a href="javascript:;" class="oper_btn"@click="oper_btn_click('{{ order.order_id }}','4')">评价</a></td>
+                            <td width="15%"><a href="javascript:;" class="oper_btn" @click="oper_btn_click('{{ order.order_id }}','4')">评价</a></td>
                         {% elif order.status == 5 %}
                             <td width="15%">已完成</td>
                             <td width="15%"><a href="javascript:;" class="oper_btn">再次购买</a></td>

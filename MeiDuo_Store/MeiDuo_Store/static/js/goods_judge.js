@@ -9,6 +9,7 @@ var vm = new Vue({
     },
     mounted: function(){
         this.username = getCookie('username');
+        console.log(this.username);
         // 渲染评价界面
         this.render_comments();
     },
