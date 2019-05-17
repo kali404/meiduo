@@ -4,9 +4,11 @@ var vm = new Vue({
     delimiters: ['[[', ']]'],
     data: {
         host,
-        skus: []
+        skus: [],
+        username:'',
     },
     mounted: function(){
+        this.username = getCookie('username');
         // 渲染评价界面
         this.render_comments();
     },

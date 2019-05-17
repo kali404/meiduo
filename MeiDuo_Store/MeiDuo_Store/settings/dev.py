@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'goods.apps.GoodsConfig',
     'carts.apps.CartsConfig',
     'orders.apps.OrdersConfig',
+    'payment.apps.PaymentConfig',
 
     # 以下为第三方
     'haystack',  # 全文检索
@@ -159,21 +160,21 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
-    "history": { # 用户浏览记录
+    "history": {  # 用户浏览记录
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6666/3",
         "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            }
-        },
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
     "carts": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6666/4",
         "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            }
-        },
-    }
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+}
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "session"
@@ -263,3 +264,9 @@ HAYSTACK_CONNECTIONS = {
 
 # 搜索页一页多少数据
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
+
+#  支付宝
+ALIPAY_APPID = '2016100100637735'  # 应用编号
+ALIPAY_DEBUG = True  # 如果使用沙箱则调试，如果有正式的账号则非调试
+ALIPAY_RETURN_URL = 'http://www.meiduo.site:8000/payment/status/'  # 当用户支付成功后，支付宝会返回本网站的这个地址
+ALIPAY_GATEWAY = 'https://openapi.alipaydev.com/gateway.do?'  # 网关

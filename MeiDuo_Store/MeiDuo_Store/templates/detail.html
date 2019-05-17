@@ -132,7 +132,7 @@
                 </div>
             </div>
 
-            {% for spec in spec_list %}
+            {% for spec in specs_list %}
                 <div class="type_select">
                     <label>{{ spec.name }}:</label>
                     {% for option in spec.options %}
@@ -172,24 +172,22 @@
                 <li @click="on_tab_content('detail')" :class="tab_content['detail']==true?'active':''">商品详情</li>
                 <li @click="on_tab_content('pack')" :class="tab_content['pack']==true?'active':''">规格与包装</li>
                 <li @click="on_tab_content('comment')" :class="tab_content['comment']==true?'active':''">
-                    商品评价({{ sku.comments }})
+                    商品评价([[ comments.length ]])
                 </li>
                 <li @click="on_tab_content('service')" :class="tab_content['service']==true?'active':''">售后服务</li>
             </ul>
             <div class="tab_content current" v-show="tab_content['detail']">{{ spu.desc_detail|safe }}</div>
             <div class="tab_content current" v-show="tab_content['pack']">{{ spu.desc_pack|safe }}</div>
             <div class="tab_content current" v-show="tab_content['comment']">
-                <ul class="judge_list_con">
-                    <li class="judge_list fl">
+                 <ul class="judge_list_con">
+                    <li class="judge_list fl" v-for="comment in comments">
                         <div class="user_info fl">
-                            <img src="images/cat.jpg">
-                            <b>潇***啼</b>
+                            <img src="/static/images/cat.jpg">
+                            <b>[[comment.username]]</b>
                         </div>
                         <div class="judge_info fl">
-                            <div class="stars_five"></div>
-                            <div class="judge_detail">
-                                派送非常快，第二天上午就收到。2天使用初步总结，前一部手机也是华为P9plus.MATE10pro包装原封未拆精致大气。拆开后第一眼就看到宝石蓝的手机，非常惊艳；然后就是配件一应俱全。开机各方面设置，把通讯录、短信等同步好，同品牌手机同步很快。和P9plus一样的后置指纹识别很方便。录制指纹容易，解锁非常快，秒开！屏幕完好，默认分辨率显示效果很好。
-                            </div>
+                            <div :class="comment.score_class"></div>
+                            <div class="judge_detail">[[comment.msg]]</div>
                         </div>
                     </li>
                 </ul>
