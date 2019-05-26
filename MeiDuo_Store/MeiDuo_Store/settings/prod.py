@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os, sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import datetime
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 # Quick-start development settings - unsuitable for production
@@ -24,7 +22,9 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = '6+m*bclsn4^&^0iz@o*vy_0a5gq_+pltm0086ke$=nupbob_h+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# 调试模式
+# DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'www.meiduo.site',
@@ -52,26 +52,14 @@ INSTALLED_APPS = [
     'carts.apps.CartsConfig',
     'orders.apps.OrdersConfig',
     'payment.apps.PaymentConfig',
-    'admin.apps.AdminConfig'
 
     # 以下为第三方
     'haystack',  # 全文检索
     'django_crontab',  # 定时任务
-    'corsheaders',  # 跨域访问
-
+    'rest_framework',  # DEF
 ]
 
-# CORS
-CORS_ORIGIN_WHITELIST = (
-    'http://127.0.0.1:8080',
-    'http://localhost:8080',
-    'http://www.meiduo.site:8080',
-    'http://api.meiduo.site:8000'
-)
-CORS_ALLOW_CREDENTIALS = True  # 允许携带cookie
-
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -308,16 +296,3 @@ CRONJOBS = [
     ('*/1 * * * *', 'contents.crons.qingtai_html', '>> ' + os.path.join(os.path.dirname(BASE_DIR), 'logs/crontab.log'))
 ]
 CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'  # 支持中文
-
-# JWT
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ),
-}
-
-JWT_AUTH = {
-    # 'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-}

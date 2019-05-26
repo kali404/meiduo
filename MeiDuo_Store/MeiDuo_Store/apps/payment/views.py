@@ -66,7 +66,7 @@ class AlipayVerifyView(View):
             debug=settings.ALIPAY_DEBUG
         )
         # 验证
-        result = alipay.verify(param_dict, signature)
+        result = alipay.verify(paEram_dict, signature)
         if result:
             # 支付成功
             order_id = param_dict.get('out_trade_no')
